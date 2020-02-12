@@ -124,7 +124,7 @@ fastcubpq<-function(m,ordinal,Y,W,starting=NULL,maxiter,toler,iterc=3,invgen=TRU
         Iinv<-try(solve(D+H),silent=TRUE)
       }
       
-      if (class(Iinv)=="try-error"){
+      if (any(class(Iinv)=="try-error")){
         Iinv<-matrix(NA,nrow=nrow(D),ncol=nrow(D))
       }
       
@@ -132,7 +132,7 @@ fastcubpq<-function(m,ordinal,Y,W,starting=NULL,maxiter,toler,iterc=3,invgen=TRU
         Iinv<-matrix(NA,nrow=nrow(D),ncol=nrow(D))
       }
       
-      if ((class(Iinv)!="try-error") && !any(is.na(Iinv))){
+      if (all(class(Iinv)!="try-error") && !any(is.na(Iinv))){
         #
         if (verbose==TRUE) {print("accelerating")}
         
@@ -223,7 +223,7 @@ fastcubpq<-function(m,ordinal,Y,W,starting=NULL,maxiter,toler,iterc=3,invgen=TRU
     } else {
       Iinv<- try(solve(D+H),silent=TRUE)
     }
-    if (class(Iinv)=="try-error"){
+    if (any(class(Iinv)=="try-error")){
       Iinv<-matrix(NA,nrow=nrow(D),ncol=nrow(D))
     }
     

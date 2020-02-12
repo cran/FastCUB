@@ -172,7 +172,7 @@ fastCUB<-function(Formula,data,mix=FALSE, tolmix=1e+2,fmix= NULL,...){
     }
   }
 
-  if (class(mod)=="try-error"){
+  if (any(class(mod)=="try-error")){
     warning("Unable to estimate model: try to change tolerance and estimation settings","\n")
     stime<-NA
     durata<-NA

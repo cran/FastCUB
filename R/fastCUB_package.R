@@ -7,7 +7,7 @@
 #'   \tabular{ll}{
 #' Package: \tab fastCUB\cr
 #' Type: \tab Package\cr
-#' Version: \tab 0.0.1\cr
+#' Version: \tab 0.0.2\cr
 #' Date: \tab 2019-03-05\cr
 #' License: GPL-2 | GPL-3
 #'  }
