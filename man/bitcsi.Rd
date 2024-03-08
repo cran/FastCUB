@@ -14,7 +14,7 @@ bitcsi(m,ordinal,csi)
 \item{csi}{Feeling parameter of the shifted Binomial distribution}
 }
 \value{
-A vector of the same length as \code{ordinal}, where each entry is the shifted Binomial probability 
+A vector of the same length as \code{ordinal}, where each entry is the shifted Binomial probability
 of the corresponding observation.
 }
 \description{
@@ -29,7 +29,7 @@ pr<-bitcsi(m,ordinal,csi)
 }
 \references{
 Piccolo D. (2003). On the moments of a mixture of uniform and shifted binomial random variables,
- \emph{Quaderni di Statistica}, \bold{5}, 85--104
+\emph{Quaderni di Statistica}, \bold{5}, 85--104
 }
 \seealso{
 \code{\link{probcub00}}, \code{\link{probcubp0}},  \code{\link{probcub0q}}

@@ -21,8 +21,9 @@ function(proba,probb){
     
     return(0.5*sum(abs(proba-probb)))
   } else {
-    warning("Input vectors should have the same length")
-    return(NA)
+    cat("Error: input vectors should have the same length","\n")
   }
+  
 
+  
   }

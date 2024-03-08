@@ -6,7 +6,7 @@
 #' @keywords internal
 #' @usage kkk(m, ordinal)
 #' @param m Number of ordinal categories
-#' @param Vector of ordinal responses
+#' @param ordinal Vector of ordinal responses
 
 
 kkk <-

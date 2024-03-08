@@ -4,15 +4,12 @@
 \alias{summary.fastCUB}
 \title{S3 method: summary for class "fastCUB"}
 \usage{
-\method{summary}{fastCUB}(object, correlation = FALSE,
-  pnames = object$parnames, ...)
+\method{summary}{fastCUB}(object, correlation = FALSE, ...)
 }
 \arguments{
 \item{object}{An object of class \code{\link{fastCUB}}}
 
 \item{correlation}{Logical: should the estimated correlation matrix be returned? Default is FALSE}
-
-\item{pnames}{A vector of character for names to be assigned to estimated parameters}
 
 \item{...}{Other arguments}
 }

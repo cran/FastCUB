@@ -16,7 +16,7 @@ Return a vector whose length is NROW(Y) and whose i-th component is the logistic
 at the scalar product between the i-th row of YY and the vector \code{param}.
 }
 \description{
-Create a matrix YY binding array \code{Y} with a vector of ones, placed as the first column of YY. 
+Create a matrix YY binding array \code{Y} with a vector of ones, placed as the first column of YY.
 It applies the logistic transform componentwise to the standard matrix multiplication between YY and \code{param}.
 }
 \examples{

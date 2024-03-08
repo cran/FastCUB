@@ -65,7 +65,7 @@ profiles.fastCUB<-function(object){
   }
  
     if ( is.null(W) & is.null(Y)){
-      
+      #  nomi<-rbind("pai","csi");
       pai<-stime[1];csi<-stime[2];
       
       nprof<-1
@@ -78,7 +78,8 @@ profiles.fastCUB<-function(object){
     } 
     if (is.null(W) & !is.null(Y)) {
       bet<-stime[1:(length(stime)-1)]; csi<-stime[length(stime)]
-    
+      #nomi<-c(paste("beta",0:(length(bet)-1),sep="_"),"csi   ")
+      #Y<-as.matrix(ellipsis$Y)
       if (NCOL(Y)==1 && length(unique(Y))==2) {
         
         Y<-as.matrix(Y)
@@ -92,7 +93,8 @@ profiles.fastCUB<-function(object){
         nprof<-NROW(profiles)
         
         theorpr<-matrix(NA,nrow=m,ncol=nprof)
-       
+        
+        #paivett<-unique(logis(Y,bet))
         paivett<-c()
         profili<-c()
         for (j in 1:nprof){
@@ -108,17 +110,17 @@ profiles.fastCUB<-function(object){
         dimnames(theorpr)<-list(values,profili)
         return(theorpr)
       } else {
-        message("No fitted method available")
+        cat("No fitted method available","\n")
       }
       
     } 
     
     if (!is.null(W) & is.null(Y)){
-   
+    #  W<-as.matrix(ellipsis$W)
       
       if (NCOL(W)==1 && length(unique(W))==2){
         pai<-stime[1]; gama<-stime[2:length(stime)];
-        
+        # nomi<-c("pai    ",paste("gamma",0:(length(gama)-1),sep="_"))
         wval<-list()
         
         nw<-NCOL(W)
@@ -130,7 +132,7 @@ profiles.fastCUB<-function(object){
         nprof<-NROW(profiles)
         theorpr<-matrix(NA,nrow=m,ncol=nprof)
         csivett<-c()
-        
+        #csivett<-unique(logis(W,gama))
         profili<-c()
         for (j in 1:nprof){
           profili[j]<-"("
@@ -145,13 +147,14 @@ profiles.fastCUB<-function(object){
         return(theorpr)
         
       }  else {
-        message("No fitted method available")
+        cat("No fitted method available","\n")
         
       }
     }
       
     if (!is.null(Y) & !is.null(W)){
-    
+     # Y<-as.matrix(ellipsis$Y)
+    #  W<-as.matrix(ellipsis$W)
       ny<-NCOL(Y)
       nw<-NCOL(W)
       
@@ -160,7 +163,7 @@ profiles.fastCUB<-function(object){
         if (all(Y==W)){
           
           bet<-stime[1:(ny+1)];gama<-stime[(ny+2):length(stime)];
-        
+          #nomi<-c(paste("beta",0:(length(bet)-1),sep="_"),paste("gamma",0:(length(gama)-1),sep="_"))
           
           listW<-list()
           listY<-list()
@@ -186,6 +189,7 @@ profiles.fastCUB<-function(object){
           comcov<-cbind(eqy,eqw)
           
           YW<-as.matrix(unique(t(cbind(Y,W))))
+          #unique restituisce le righe di un array tolte le ripetizioni
           
           paivett<-csivett<-c()
           ywval<-list()
@@ -198,7 +202,8 @@ profiles.fastCUB<-function(object){
           nprof<-NROW(profiles)
           theorpr<-matrix(NA,nrow=m,ncol=nprof)
           profili<-c()
-          
+          # csivett<-unique(logis(W,gama))
+          # paivett<-unique(logis(Y,bet))
           
           for (j in 1:nprof){
             vett<-rep(NA,nw)
@@ -227,10 +232,10 @@ profiles.fastCUB<-function(object){
           return(theorpr)
           
         } else {
-          message("No fitted method available")
+          cat("No fitted method available","\n")
         }
       } else {
-        message("No fitted method available")
+        cat("No fitted method available","\n")
       }   
   } 
   

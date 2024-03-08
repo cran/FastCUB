@@ -4,7 +4,7 @@
 \alias{loglikcub0q}
 \title{Log-likelihood function of a CUB model with covariates for the feeling component}
 \usage{
-loglikcub0q(m, ordinal, W, beta0, gama)
+loglikcub0q(m, ordinal, W, pai, gama)
 }
 \arguments{
 \item{m}{Number of ordinal categories}
@@ -13,13 +13,13 @@ loglikcub0q(m, ordinal, W, beta0, gama)
 
 \item{W}{Matrix of selected covariates for explaining the feeling component}
 
-\item{beta0}{Logit transform of uncertainty parameter}
+\item{pai}{Uncertainty parameter}
 
-\item{gama}{Vector of parameters for the feeling component, with length NCOL(W) + 1 to account for 
+\item{gama}{Vector of parameters for the feeling component, with length NCOL(W) + 1 to account for
 an intercept term (first entry of gama)}
 }
 \description{
-Compute the log-likelihood function of a CUB model fitting ordinal data, with \eqn{q} 
+Compute the log-likelihood function of a CUB model fitting ordinal data, with \eqn{q}
 covariates for explaining the feeling component.
 }
 \keyword{internal}

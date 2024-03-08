@@ -36,7 +36,6 @@
 #' Number of subjects' covariates: 7 \cr
 #' Number of analyzed items: 5
 #' }
-#' @source \url{http://www.labstat.it/home/wp-content/uploads/2016/12/univer2002.txt}
 
 
 "univer"

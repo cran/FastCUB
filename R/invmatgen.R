@@ -18,12 +18,12 @@
 
 invmatgen<-function(G,H,listE){
   
-  ### G must be of diagonal form
+  ### G deve essere diagonale
   
   r<-qr(H)$rank
   
   if (r != nrow(G)){
-    warning("Procedure not applicable")
+    cat("Procedure not applicable","\n")
     return(try(solve(G+H),silent=TRUE))
     
   } else {

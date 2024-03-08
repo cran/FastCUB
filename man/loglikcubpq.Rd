@@ -15,7 +15,7 @@ loglikcubpq(m, ordinal, Y, W, bet, gama)
 
 \item{W}{Matrix of selected covariates for explaining the feeling component}
 
-\item{bet}{Vector of parameters for the uncertainty component, with length equal to 
+\item{bet}{Vector of parameters for the uncertainty component, with length equal to
 NCOL(Y)+1 to account for an intercept term (first entry of bbet)}
 
 \item{gama}{Vector of parameters for the feeling component, whose length equals
@@ -23,6 +23,6 @@ NCOL(W) + 1 to account for an intercept term (first entry of gama)}
 }
 \description{
 Compute the log-likelihood function of a CUB model fitting ordinal data
- with covariates for explaining both the feeling and the uncertainty components.
+with covariates for explaining both the feeling and the uncertainty components.
 }
 \keyword{internal}

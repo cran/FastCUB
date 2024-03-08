@@ -13,15 +13,15 @@ bitgama(m,ordinal,W,gama)
 
 \item{W}{Matrix of covariates for the feeling component}
 
-\item{gama}{Vector of parameters for the feeling component, with length equal to 
+\item{gama}{Vector of parameters for the feeling component, with length equal to
 NCOL(W)+1 to account for an intercept term (first entry of \code{gama})}
 }
 \value{
 A vector of the same length as \code{ordinal}, where each entry is the shifted Binomial probability for
- the corresponding observation and feeling value.
+the corresponding observation and feeling value.
 }
 \description{
-Return the shifted Binomial probabilities of ordinal responses where the feeling component 
+Return the shifted Binomial probabilities of ordinal responses where the feeling component
 is explained by covariates via a logistic link.
 }
 \examples{

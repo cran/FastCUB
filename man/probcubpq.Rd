@@ -15,19 +15,19 @@ probcubpq(m,ordinal,Y,W,bet,gama)
 
 \item{W}{Matrix of covariates for explaining the feeling component}
 
-\item{bet}{Vector of parameters for the uncertainty component, whose length equals 
+\item{bet}{Vector of parameters for the uncertainty component, whose length equals
 NCOL(Y) + 1 to include an intercept term in the model (first entry)}
 
-\item{gama}{Vector of parameters for the feeling component, whose length equals 
+\item{gama}{Vector of parameters for the feeling component, whose length equals
 NCOL(W)+1 to include an intercept term in the model (first entry)}
 }
 \value{
-A vector of the same length as \code{ordinal}, whose i-th component is the probability of the 
-i-th rating according to a CUB distribution with given covariates for both uncertainty and feeling, 
+A vector of the same length as \code{ordinal}, whose i-th component is the probability of the
+i-th rating according to a CUB distribution with given covariates for both uncertainty and feeling,
 and specified coefficients vectors \code{bet} and \code{gama}, respectively.
 }
 \description{
-Compute the probability distribution of a CUB model with covariates for both the feeling 
+Compute the probability distribution of a CUB model with covariates for both the feeling
 and the uncertainty components.
 }
 \examples{
@@ -42,12 +42,12 @@ gama<-c(-0.91,-0.7); bet<-c(-0.81,0.93)
 probi<-probcubpq(m,ordinal,Y,W,bet,gama)
 }
 \references{
-Piccolo D. (2006). Observed Information Matrix for MUB Models, 
+Piccolo D. (2006). Observed Information Matrix for MUB Models,
 \emph{Quaderni di Statistica}, \bold{8}, 33--78 \cr
 Piccolo D. and D'Elia A. (2008). A new approach for modelling consumers' preferences, \emph{Food Quality and Preference},
 \bold{18}, 247--259 \cr
-Iannario M. and Piccolo D. (2012). CUB models: Statistical methods and empirical evidence, in: 
-Kenett R. S. and Salini S. (eds.), \emph{Modern Analysis of Customer Surveys: with applications using R}, 
+Iannario M. and Piccolo D. (2012). CUB models: Statistical methods and empirical evidence, in:
+Kenett R. S. and Salini S. (eds.), \emph{Modern Analysis of Customer Surveys: with applications using R},
 J. Wiley and Sons, Chichester, 231--258
 }
 \seealso{

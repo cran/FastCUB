@@ -20,7 +20,7 @@ The inverse of matrix G + H computed recursively thanks to matrices listed in li
 Compute the variance-covariance matrix of the incomplete score vector involved in Louis' identity for the observed information matrix
 }
 \references{
-Miller K. (1981).  On the inverse of the sum of matrices, 
+Miller K. (1981).  On the inverse of the sum of matrices,
 \emph{Mathematics Magazine}, \bold{54}, 67--72 \cr
 }
 \seealso{

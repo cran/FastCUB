@@ -16,7 +16,7 @@ Parameters correlation matrix for fitted fastCUB models.
 }
 \description{
 Compute parameter correlation matrix for estimated model as returned by an object
- of class "fastCUB".
+of class "fastCUB".
 }
 \seealso{
 \code{fastCUB}, \code{vcov}

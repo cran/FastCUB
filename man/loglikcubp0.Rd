@@ -4,7 +4,7 @@
 \alias{loglikcubp0}
 \title{Log-likelihood function of a CUB model with covariates for the uncertainty component}
 \usage{
-loglikcubp0(m, ordinal, Y, bbet, gama0)
+loglikcubp0(m, ordinal, Y, bbet, ccsi)
 }
 \arguments{
 \item{m}{Number of ordinal categories}
@@ -13,13 +13,13 @@ loglikcubp0(m, ordinal, Y, bbet, gama0)
 
 \item{Y}{Matrix of selected covariates for explaining the uncertainty component}
 
-\item{bbet}{Vector of parameters for the uncertainty component, with length equal to 
+\item{bbet}{Vector of parameters for the uncertainty component, with length equal to
 NCOL(Y)+1 to account for an intercept term (first entry of bbet)}
 
-\item{gama0}{Logit transform of feeling parameter}
+\item{ccsi}{Feeling parameter}
 }
 \description{
-Compute the log-likelihood function of a CUB model fitting ordinal responses with covariates 
+Compute the log-likelihood function of a CUB model fitting ordinal responses with covariates
 for explaining the uncertainty component.
 }
 \keyword{internal}

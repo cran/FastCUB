@@ -20,7 +20,7 @@
 #' @keywords htest utilities
 #' @examples
 #' data(univer)
-#' m<-7; ordinal<-univer$global; cov<-univer$gender
+#' m<-7; ordinal<-univer$global; cov<-univer$diploma
 #' ini<-inibestgama(m,ordinal,W=cov)
 
 
@@ -36,14 +36,7 @@ inibestgama<-function(m,ordinal,W){
   
   WW<-cbind(1,W)                           
   ni<-log((m-ordinal+0.5)/(ordinal-0.5))
-  rr<-  qr(t(WW)%*%WW)$rank
-  
-  if (rr==ncol(WW)){
-    mat<-solve(t(WW)%*%WW)
-    gama<-(mat)%*%(t(WW)%*%ni) 
-  } else {
-    gama<-as.matrix(rep(0.1,ncol(WW)))
-  }
+  gama<-(solve(t(WW)%*%WW))%*%(t(WW)%*%ni) 
   
   q<-NCOL(W)
   listanomi<-paste("gamma",0:q,sep="_")

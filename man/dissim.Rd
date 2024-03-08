@@ -16,7 +16,7 @@ Numeric value of the dissimilarity index, assessing the distance to a perfect fi
 }
 \description{
 Compute the normalized dissimilarity measure between observed
- relative frequencies and estimated (theoretical) probabilities of a discrete distribution.
+relative frequencies and estimated (theoretical) probabilities of a discrete distribution.
 }
 \examples{
 proba<-c(0.01,0.03,0.08,0.07,0.27,0.37,0.17)

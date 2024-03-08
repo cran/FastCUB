@@ -5,8 +5,7 @@
 #' @param ...  Other arguments
 #' @method vcov fastCUB
 #' @export 
-#' @return Variance-covariance matrix of the final ML estimates for parameters of the fitted CUB model, 
-#' according to the logit transform also when covariates are not included for uncertainty or feeling parameters. 
+#' @return Variance-covariance matrix of the final ML estimates for parameters of the fitted CUB model.
 #' It is computed on the basis of Louis' identity within the EM algorithm.
 #' @import methods
 #' @seealso \code{\link{fastCUB}}
@@ -28,20 +27,15 @@ vcov.fastCUB<-function(object, ...){
     digits<-options()$digits
   }
   
-   varcov<-object$varmat
-   listanomi<-parnames(object)
-   if (NCOL(object$covpai)==0){
-     listanomi[1]<-paste("beta","0",sep="_")
-   } 
-     np<-length(object$estimates)
-     if (NCOL(object$covcsi)==0){
-       listanomi[np]<-paste("gamma","0",sep="_")
-     }
-   
-   
+  ellipsis<-object$ellipsis
+  family<-object$family
+  varcov<-as.matrix(object$vmatLouis)
+  listanomi<-parnames(object)
   
-   rownames(varcov)<-listanomi
-   colnames(varcov)<-listanomi
-  
+  if (NROW(varcov)>1){
+    dimnames(varcov)<-list(listanomi,listanomi)
+  } else {
+    dimnames(varcov)<-list(listanomi,"Squared Standard Error")
+  }
   return(round(varcov,digits=digits))
 }

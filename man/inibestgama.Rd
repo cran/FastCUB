@@ -15,24 +15,24 @@ inibestgama(m,ordinal,W)
 }
 \value{
 A vector of length equal to NCOL(W)+1, whose entries are the preliminary estimates
- of the parameters for the feeling component, including an intercept term as first entry.
+of the parameters for the feeling component, including an intercept term as first entry.
 }
 \description{
-Compute preliminary parameter estimates for the feeling component of a CUB model 
+Compute preliminary parameter estimates for the feeling component of a CUB model
 fitted to ordinal responses
 These estimates are set as initial values for parameters to start the E-M algorithm.
 }
 \examples{
 data(univer)
-m<-7; ordinal<-univer$global; cov<-univer$gender
+m<-7; ordinal<-univer$global; cov<-univer$diploma
 ini<-inibestgama(m,ordinal,W=cov)
 }
 \references{
-Iannario M. (2008). Selecting feeling covariates in rating surveys, 
+Iannario M. (2008). Selecting feeling covariates in rating surveys,
 \emph{Rivista di Statistica Applicata}, \bold{20}, 103--116 \cr
 Iannario M. (2009). A comparison of preliminary estimators in a class of ordinal data models,
 \emph{Statistica & Applicazioni}, \bold{VII}, 25--44 \cr
-Iannario M. (2012).  Preliminary estimators for a mixture model of ordinal data, 
+Iannario M. (2012).  Preliminary estimators for a mixture model of ordinal data,
 \emph{Advances in Data Analysis and Classification}, \bold{6}, 163--184
 }
 \seealso{

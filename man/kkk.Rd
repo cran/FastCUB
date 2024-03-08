@@ -9,11 +9,11 @@ kkk(m, ordinal)
 \arguments{
 \item{m}{Number of ordinal categories}
 
-\item{Vector}{of ordinal responses}
+\item{ordinal}{Vector of ordinal responses}
 }
 \description{
-Compute the sequence of binomial coefficients \eqn{{m-1}\choose{r-1}}, for \eqn{r= 1, \dots, m}, 
-and then returns a vector of the same length as ordinal, whose i-th component is the corresponding binomial 
+Compute the sequence of binomial coefficients \eqn{{m-1}\choose{r-1}}, for \eqn{r= 1, \dots, m},
+and then returns a vector of the same length as ordinal, whose i-th component is the corresponding binomial
 coefficient \eqn{{m-1}\choose{r_i-1}}
 }
 \keyword{internal}

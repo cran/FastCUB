@@ -16,53 +16,87 @@
 
 ########################################
 
+########################################
+
 decomp<-function(ttau,ordinal,m,param,ai,Y,W){
   
   np<-length(param)
   n<-length(ai) # in long form
   
+  
   np<-length(param)
   n<-length(ordinal) # in long form
-
+  
+  
   if (is.null(Y)){
     p<-0
-    beta0jj<-param[1]
-    paijj<-rep(1/(1+exp(-beta0jj)),n)
-    Y1<-rep(1,n)
+    paijj<-param[1]
+    Y1<-rep(1/(paijj*(1-paijj)),n)
     YY<-as.matrix(Y1)
-    bi<-paijj*(1-paijj)
-  
+    
+    bi<-paijj^2 + ttau*(1-2*paijj)
+    
+    if (is.null(W)){
+      q<-0
+      csijj<-param[2]
+      W1<-rep(1/(csijj*(1-csijj)),n)
+      WW<-as.matrix(W1)
+      
+    } else {
+      q<-NCOL(W)
+      W1<-rep(1,n)
+      gamajj<-param[2:np]
+      csijj<-logis(W,gamajj)
+      WW<-cbind(W1,W)
+      
+      ui<-matrix(0,nrow=q+1,ncol=q+1)
+      
+      csicsi<-csijj*(1-csijj)
+      
+      Wcsi<-(m-1)*apply(WW,2,function(x) x*csicsi)
+      
+      
+    }
+    
+    
+    
   } else {
+    
     p<-NCOL(Y)
     Y1<-rep(1,n)
     YY<-cbind(Y1,Y)
     betajj<-param[1:(p+1)]
     paijj<-logis(Y,betajj)   
     bi<-paijj*(1-paijj)
-  }
-  
-  
-  if (is.null(W)){
-    q<-0
-    gama0jj<-param[-c(1:(p+1))]
-    csijj<-rep(1/(1+exp(-gama0jj)),n)
-    W1<-rep(1,n)
-    WW<-as.matrix(W1)
     
-  } else {
-    q<-NCOL(W)
-    W1<-rep(1,n)
-    gamajj<-param[(p+2):np]
-    csijj<-logis(W,gamajj)
-    WW<-cbind(W1,W)
+    #}
     
-  }
-  csicsi<-csijj*(1-csijj)
+    if (is.null(W)){
+      q<-0
+      csijj<-param[p+2]
+      W1<-rep(1/(csijj*(1-csijj)),n)
+      WW<-as.matrix(W1)
+      
+      
+    } else {
+      q<-NCOL(W)
+      W1<-rep(1,n)
+      gamajj<-param[(p+2):np]
+      csijj<-logis(W,gamajj)
+      WW<-cbind(W1,W)
+      
+      
+      csicsi<-csijj*(1-csijj)
+      
+      Wcsi<-(m-1)*apply(WW,2,function(x) x*csicsi)
+    }
+  } ### da togliere
   
-  Wcsi<-(m-1)*apply(WW,2,function(x) x*csicsi)  
   
   mat1<-mat2<-matrix(0,nrow=np,ncol=np)
-
+  denom<-paijj*(1-paijj)
+  
+  
   vi<-WW
   
   for (s in 1:(q+1)){
@@ -70,7 +104,8 @@ decomp<-function(ttau,ordinal,m,param,ai,Y,W){
   }
   
   
-
+  # matrici dei prodotti scalari
+  
   auxpai<-rep(0,p+1)
   for (t in 1:(p+1)){
     auxpai[t]<- t(YY[,t])%*%as.matrix((ttau-paijj))
@@ -110,7 +145,7 @@ decomp<-function(ttau,ordinal,m,param,ai,Y,W){
     for (j in 1:(q+1)){
       mat1[t,(p+1+j)]<-mat1[(p+1+j),t]<- mat2[t,(p+1+j)] + t(Ytau[,t])%*%vi[,j] 
       for (l in 1:(q+1)){
-        mat1[(p+1+l),(p+1+j)]<-  t(vitau[,j])%*%vi[,l] + (t(vi[,l])%*%ttau)*(t(vi[,j])%*%ttau)
+        mat1[(p+1+l),(p+1+j)]<-  t(vitau[,j])%*%vi[,l]       + (t(vi[,l])%*%ttau)*(t(vi[,j])%*%ttau)
         
       }
     }
@@ -132,7 +167,12 @@ decomp<-function(ttau,ordinal,m,param,ai,Y,W){
   }
   for (t in 1:(q+1)){
     for (s in 1:(q+1)){
-      ui<-as.matrix(Wcsi[,t]*WW[,s])
+      
+      if (is.null(W)){
+        ui<- (ordinal-1)/(1-csijj)^2 + (m-ordinal)/(csijj^2)
+      } else{
+        ui<-as.matrix(Wcsi[,t]*WW[,s])
+      }
       
       mat[p+1+t,p+1+s]<- t(ui)%*%ttau
     }

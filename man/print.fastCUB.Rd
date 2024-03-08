@@ -12,7 +12,7 @@
 \item{...}{Other arguments}
 }
 \value{
-Brief summary results of the fitting procedure, including parameter estimates, their standard errors and 
+Brief summary results of the fitting procedure, including parameter estimates, their standard errors and
 the executed call.
 }
 \description{

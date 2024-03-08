@@ -16,17 +16,17 @@ NCOL(Y)+1 to include an intercept term in the model (first entry)}
 
 \item{pai}{Uncertainty parameter}
 
-\item{gama}{Vector of parameters for the feeling component, whose length equals 
+\item{gama}{Vector of parameters for the feeling component, whose length equals
 NCOL(W)+1 to include an intercept term in the model (first entry)}
 }
 \value{
 A vector of the same length as \code{ordinal}, whose i-th component is the
-probability of the i-th observation according to a CUB distribution with the corresponding values 
+probability of the i-th observation according to a CUB distribution with the corresponding values
 of the covariates for the feeling component and coefficients specified in \code{gama}.
 }
 \description{
 Compute the probability distribution of a CUB model with covariates
- for the feeling component.
+for the feeling component.
 }
 \examples{
 data(relgoods)
@@ -40,16 +40,16 @@ pai<-0.44; gama<-c(-0.91,-0.7)
 pr<-probcub0q(m,ordinal,W,pai,gama)
 }
 \references{
-Piccolo D. (2006). Observed Information Matrix for MUB Models, 
+Piccolo D. (2006). Observed Information Matrix for MUB Models,
 \emph{Quaderni di Statistica}, \bold{8}, 33--78 \cr
 Piccolo D. and D'Elia A. (2008). A new approach for modelling consumers' preferences, \emph{Food Quality and Preference},
 \bold{18}, 247--259 \cr
-Iannario M. and Piccolo D. (2012). CUB models: Statistical methods and empirical evidence, in: 
-Kenett R. S. and Salini S. (eds.), \emph{Modern Analysis of Customer Surveys: with applications using R}, 
+Iannario M. and Piccolo D. (2012). CUB models: Statistical methods and empirical evidence, in:
+Kenett R. S. and Salini S. (eds.), \emph{Modern Analysis of Customer Surveys: with applications using R},
 J. Wiley and Sons, Chichester, 231--258
 }
 \seealso{
-\code{\link{bitgama}}, \code{\link{probcub00}}, \code{\link{probcubp0}}, 
+\code{\link{bitgama}}, \code{\link{probcub00}}, \code{\link{probcubp0}},
 \code{\link{probcubpq}}
 }
 \keyword{distribution}

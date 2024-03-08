@@ -13,18 +13,18 @@ probcubp0(m,ordinal,Y,bet,csi)
 
 \item{Y}{Matrix of covariates for explaining the uncertainty component}
 
-\item{bet}{Vector of parameters for the uncertainty component, whose length equals 
+\item{bet}{Vector of parameters for the uncertainty component, whose length equals
 NCOL(Y) + 1 to include an intercept term in the model (first entry)}
 
 \item{csi}{Feeling parameter}
 }
 \value{
-A vector of the same length as \code{ordinal}, whose i-th component is the probability of the i-th 
-observation according to a CUB model with the corresponding values of the covariates for the 
+A vector of the same length as \code{ordinal}, whose i-th component is the probability of the i-th
+observation according to a CUB model with the corresponding values of the covariates for the
 uncertainty component and coefficients for the covariates specified in \code{bet}.
 }
 \description{
-Compute the probability distribution of a CUB model with covariates for the 
+Compute the probability distribution of a CUB model with covariates for the
 uncertainty component.
 }
 \examples{
@@ -39,12 +39,12 @@ bet<-c(-0.81,0.93); csi<-0.20
 probi<-probcubp0(m,ordinal,Y,bet,csi)
 }
 \references{
-Piccolo D. (2006). Observed Information Matrix for MUB Models, 
+Piccolo D. (2006). Observed Information Matrix for MUB Models,
 \emph{Quaderni di Statistica}, \bold{8}, 33--78 \cr
 Piccolo D. and D'Elia A. (2008). A new approach for modelling consumers' preferences, \emph{Food Quality and Preference},
 \bold{18}, 247--259 \cr
-Iannario M. and Piccolo D. (2012). CUB models: Statistical methods and empirical evidence, in: 
-Kenett R. S. and Salini S. (eds.), \emph{Modern Analysis of Customer Surveys: with applications using R}, 
+Iannario M. and Piccolo D. (2012). CUB models: Statistical methods and empirical evidence, in:
+Kenett R. S. and Salini S. (eds.), \emph{Modern Analysis of Customer Surveys: with applications using R},
 J. Wiley and Sons, Chichester, 231--258
 }
 \seealso{

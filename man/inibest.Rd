@@ -13,11 +13,11 @@ inibest(m,freq)
 }
 \value{
 A vector \eqn{(\pi,\xi)} of the initial parameter estimates for a CUB model without covariates,
- given the absolute frequency distribution of ordinal responses
+given the absolute frequency distribution of ordinal responses
 }
 \description{
 Compute preliminary parameter estimates of a CUB model without covariates for given ordinal
- responses. These preliminary estimators are used within the package code to start the E-M algorithm.
+responses. These preliminary estimators are used within the package code to start the E-M algorithm.
 }
 \examples{
 m<-9
@@ -27,10 +27,10 @@ pai<-estim[1]
 csi<-estim[2]
 }
 \references{
-Iannario M. (2009). A comparison of preliminary estimators in a class of ordinal data models, 
+Iannario M. (2009). A comparison of preliminary estimators in a class of ordinal data models,
 \emph{Statistica & Applicazioni}, \bold{VII}, 25--44 \cr
- Iannario M. (2012). Preliminary estimators for a mixture model of ordinal data, 
- \emph{Advances in Data Analysis and Classification}, \bold{6}, 163--184
+Iannario M. (2012). Preliminary estimators for a mixture model of ordinal data,
+\emph{Advances in Data Analysis and Classification}, \bold{6}, 163--184
 }
 \seealso{
 \code{\link{inibestgama}}

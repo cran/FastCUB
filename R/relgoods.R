@@ -91,7 +91,6 @@
 #' Number of subjects' covariates: 16 \cr
 #' Number of analyzed items: 34 \cr
 #' Warning: with a limited number of missing values
-#' @source \url{http://www.labstat.it/home/wp-content/uploads/2015/09/relgoods.txt}
 
 
 "relgoods"

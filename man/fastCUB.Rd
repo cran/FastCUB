@@ -4,29 +4,23 @@
 \alias{fastCUB}
 \title{Main function for fast estimation CUB models}
 \usage{
-fastCUB(Formula, data, mix=FALSE, tolmix=1e+2,fmix= NULL,...)
+fastCUB(Formula, data, ...)
 }
 \arguments{
-\item{Formula}{Object of class Formula with two right-hand side: the first for uncertainty covariates, the second for feeling covariates.}
+\item{Formula}{Object of class Formula.}
 
 \item{data}{Data frame from which model matrices and response variables are taken.}
 
-\item{mix}{Logical: should a first preliminary standard EM be run at toler equal to tolmix? (default is FALSE).}
-
-\item{tolmix}{Convergence tolerance for first preliminary EM (if mix=TRUE).}
-
-\item{fmix}{Fraction of iteration needed for preliminary EM (if mix=TRUE). Default is null.}
-
-\item{...}{Additional arguments to be passed for the specification of the model and the acceleration steps.}
+\item{...}{Additional arguments to be passed for the specification of the model, including covariates matrices Y, W, X for
+#' for uncertainty, feeling and shelter, respectively.}
 }
 \value{
 An object of the class "fastCUB": returns a list containing the following results:
-\item{estimates}{Maximum likelihood estimates of model parameters}
+\item{estimates}{Maximum likelihood estimates: \eqn{(\pi, \xi)}}
 \item{loglik}{Log-likelihood function at the final estimates}
 \item{varmat}{Variance-covariance matrix of final estimates}
 \item{niter}{Number of executed iterations}
 \item{BIC}{BIC index for the estimated model}
-\item{parnames}{Names for model parameters}
 }
 \description{
 Main function to estimate and validate a CUB model for explaining uncertainty
@@ -37,27 +31,7 @@ This is the main function for CUB models, which calls for the corresponding func
 covariates are specified. It performs maximum likelihood estimation via the E-M algorithm
 for CUB models and extensions based on the Louis'identity for the observed information matrix.
 }
-\examples{
-\donttest{
-library(FastCUB)
-data(univer)
-ordinal<-univer$global
-m<-7
-effe<-with(univer, Formula(global~0|gender+freqserv+age +changefa))
-cub0q<-fastCUB(effe,data=univer,m=7, maxiter=100,toler=1e-8,mix=TRUE,verbose=FALSE)
-summary(cub0q)
-## Fast EM for  CUB model with covariates only for uncertainty
-effe<-with(univer, Formula(global~gender+freqserv+age +changefa|0))
-cubp0<-fastCUB(effe,data=univer,m=7, maxiter=100,toler=1e-8,iterc=5,verbose=TRUE)
-## Fast EM for  CUB model with covariates for both feeling and uncertainty
-effe<-with(univer, Formula(global~gender+freqserv+age +changefa|gender+freqserv+age +changefa))
-cubpq<-fastCUB(effe,data=univer,m=7, maxiter=100,toler=1e-8,iterc=5)
-summary(cubpq)
-BIC(cubpq)
-}
-
-}
 \seealso{
-\code{\link{probcub00}}, \code{\link{probcubp0}}, \code{\link{probcub0q}}, \code{\link{probcubpq}}
+\code{\link{probcub00}}, \code{\link{probcubp0}}, \code{\link{probcub0q}}, \code{\link{probcubpq}},
 }
 \keyword{package}

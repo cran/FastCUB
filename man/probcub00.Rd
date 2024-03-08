@@ -28,7 +28,7 @@ plot(1:m,pr,type="h",main="CUB probability distribution",xlab="Ordinal categorie
 points(1:m,pr,pch=19)
 }
 \references{
-Piccolo D. (2003). On the moments of a mixture of uniform and shifted binomial random variables. 
+Piccolo D. (2003). On the moments of a mixture of uniform and shifted binomial random variables.
 \emph{Quaderni di Statistica}, \bold{5}, 85--104\cr
 }
 \seealso{

@@ -15,7 +15,7 @@
 S3 method fitted for objects of class \code{\link{fastCUB}}.
 }
 \details{
-Returns the fitted probability distribution for GEM models with no covariates. If only one dichotomous 
+Returns the fitted probability distribution for GEM models with no covariates. If only one dichotomous
 covariate is included in the model to explain some components, it returns the fitted probability distribution for each profile.
 }
 \seealso{

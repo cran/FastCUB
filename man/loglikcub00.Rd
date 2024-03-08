@@ -4,19 +4,19 @@
 \alias{loglikcub00}
 \title{Log-likelihood function of a CUB model without covariates}
 \usage{
-loglikcub00(m, freq, beta0, gama0)
+loglikcub00(m, freq, pai, csi)
 }
 \arguments{
 \item{m}{Number of ordinal categories}
 
 \item{freq}{Vector of the absolute frequency distribution}
 
-\item{beta0}{Logit transform of uncertainty parameter}
+\item{pai}{Uncertainty parameter}
 
-\item{gama0}{Logit transform of fFeeling parameter}
+\item{csi}{Feeling parameter}
 }
 \description{
-Compute the log-likelihood function of a CUB model without covariates for a given 
+Compute the log-likelihood function of a CUB model without covariates for a given
 absolute frequency distribution.
 }
 \keyword{internal}

@@ -12,8 +12,7 @@
 \item{...}{Other arguments}
 }
 \value{
-Variance-covariance matrix of the final ML estimates for parameters of the fitted CUB model, 
-according to the logit transform also when covariates are not included for uncertainty or feeling parameters. 
+Variance-covariance matrix of the final ML estimates for parameters of the fitted CUB model.
 It is computed on the basis of Louis' identity within the EM algorithm.
 }
 \description{

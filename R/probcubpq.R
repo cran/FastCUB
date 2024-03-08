@@ -39,18 +39,18 @@
 
 
 probcubpq <-
-  function(m,ordinal,Y,W,bet,gama){
-    
-    if (is.factor(ordinal)){
-      ordinal<-unclass(ordinal)
-    }
-    Y<-as.matrix(Y); W<-as.matrix(W)
-    if (ncol(W)==1){
-      W<-as.numeric(W)
-    }
-    if (ncol(Y)==1){
-      Y<-as.numeric(Y)
-    }
-    
-    logis(Y,bet)*(bitgama(m,ordinal,W,gama)-1/m)+1/m
+function(m,ordinal,Y,W,bet,gama){
+  
+  if (is.factor(ordinal)){
+    ordinal<-unclass(ordinal)
   }
+  Y<-as.matrix(Y); W<-as.matrix(W)
+  if (ncol(W)==1){
+    W<-as.numeric(W)
+  }
+  if (ncol(Y)==1){
+    Y<-as.numeric(Y)
+  }
+  
+  logis(Y,bet)*(bitgama(m,ordinal,W,gama)-1/m)+1/m
+}

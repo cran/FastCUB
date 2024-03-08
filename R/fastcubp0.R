@@ -2,7 +2,7 @@
 #' @description Estimate and validate a CUB model for given ordinal responses, with covariates for explaining 
 #' the feeling component via a logistic transform.
 #' @aliases fastcubp0
-#' @usage fastcubp0(m,ordinal,Y,starting=NULL,maxiter,toler,iterc=3,invgen=TRUE,verbose=FALSE)
+#' @usage fastcubp0(m,ordinal,Y,starting=NULL,maxiter,toler,iterc=3,invgen=TRUE)
 #' @param m Number of ordinal categories
 #' @param ordinal Vector of ordinal responses
 #' @param Y Matrix of selected covariates for explaining the uncertainty component
@@ -10,15 +10,13 @@
 #' @param maxiter Maximum number of iterations allowed for running the optimization algorithm 
 #' @param toler Fixed error tolerance for final estimates 
 #' @param iterc Iteration from which the acceleration strategy starts 
-#' @param verbose Logical: should messages about  acceleration steps be printed out? (Default is FALSE)
 #' @param invgen Logical: should the recursive formula for the inverse of the information matrix be considered? (Default is TRUE)
 #' @return An object of the class "fastCUB"
 #' @import stats graphics
 #' @keywords internal 
 
 
-
-fastcubp0<-function(m,ordinal,Y,starting=NULL,maxiter,toler,iterc=3,invgen=TRUE,verbose=FALSE){
+fastcubp0<-function(m,ordinal,Y,starting=NULL,maxiter,toler,iterc=3,invgen=TRUE){
   tt0<-proc.time()
   n<-length(ordinal)
   Y<-as.matrix(Y)
@@ -36,57 +34,57 @@ fastcubp0<-function(m,ordinal,Y,starting=NULL,maxiter,toler,iterc=3,invgen=TRUE,
   if (is.null(starting)){
     inipaicsi<-inibest(m,freq)
     pai<-inipaicsi[1]; bet0<-log(pai/(1-pai));  
-    betjj<- c(bet0,rep(0.1,p))               
+    betjj<- c(bet0,rep(0.1,p))                #betjj<-rep(0.1,p+1);
     csijj<-inipaicsi[2]
   } else {
     betjj<-starting[1:(p+1)]; csijj<-starting[p+2]
   }
   
   ##############################################################
-  gama0jj<-log(csijj/(1-csijj))
-  loglikjj<-loglikcubp0(m,ordinal,Y,betjj,gama0jj)
+  loglikjj<-loglikcubp0(m,ordinal,Y,betjj,csijj)
   # ********************************************************************
   # ************* E-M algorithm for CUB(p,0) ***************************
   # ********************************************************************
   nniter<-1
-  iterc2<-iterc
+  
   
   while(nniter<=maxiter){
     
-    thetaold<-c(betjj,gama0jj)
+    thetaold<-c(betjj,csijj)
     
     loglikold<-loglikjj
     bb<-probbit(m,csijj)
-    vettn<-bb[ordinal]     
-    aai<- -1+ 1/(logis(Y,betjj)) 
-    ttau<-1/(1+aai/(m*vettn))       
+    vettn<-bb[ordinal]      # probbit for all ordinal (r_i,i=1,2,...,n)
+    aai<- -1+ 1/(logis(Y,betjj)) #exp(-(YY%*%betjj));
+    ttau<-1/(1+aai/(m*vettn))       # tau is a reserved word in R
     averpo<-sum(ordinal*ttau)/sum(ttau)
     ################################## maximize w.r.t. bet  ########
     bet<-betjj
     covar<-YY
     tauno<-ttau
-    
+    #nlmaxbet<-nlm(effe10,betjj,esterno10);   
     opmaxbet<-optim(bet,effe10,esterno10=cbind(tauno,covar))
     ################################################################         
     betjj<-opmaxbet$par
-   
-    csijj<-(m-averpo)/(m-1)       
-  
-    gama0jj<-log(csijj/(1-csijj))
-    loglikjj<-loglikcubp0(m,ordinal,Y,betjj,gama0jj)
+    # betjj<-nlmaxbet$estimate;        #updated bet estimates
+    csijj<-(m-averpo)/(m-1)       #updated csi estimate
+    #loglikjj<- -opmaxbet$value
     
     
-    thetanew<-c(betjj,gama0jj)
-    param<-thetanew
+    thetanew<-c(betjj,csijj)
     
-    if (nniter>= iterc2){
-      ai<- ordinal - 1 -  (m-1)*(1-csijj)
+    ai<- ordinal - 1 -  (m-1)*(1-csijj)
+    
+    #ai<- (m-1)*(1-csii) - (ordinal-1)
+    if (nniter>= iterc){
       
+      param<-thetanew
       bb<-probbit(m,csijj)
-      vettn<-bb[ordinal] 
-      aai<- -1+1/(logis(Y,betjj))
+      vettn<-bb[ordinal]      # probbit for all ordinal (r_i,i=1,2,...,n)
+      aai<- -1+ 1/(logis(Y,betjj)) #exp(-(YY%*%betjj));
       ttau<-1/(1+aai/(m*vettn))
-      
+      ai<- ordinal - 1 -  (m-1)*(1-csijj)
+      loglikold<-loglikcubp0(m,ordinal,Y,betjj,csijj)
       
       dc<-decomp(ttau,ordinal,m,param,ai,Y=Y,W=NULL)
       
@@ -110,60 +108,20 @@ fastcubp0<-function(m,ordinal,Y,starting=NULL,maxiter,toler,iterc=3,invgen=TRUE,
       if (invgen==TRUE){
         Iinv<- invmatgen(D,H,listE)
       } else {
-        Iinv<- try(solve(D+H),silent=TRUE)
+        Iinv<- solve(D+H)
       } 
       
-      if (any(class(Iinv)=="try-error")){
-        Iinv<-matrix(NA,nrow=nrow(D),ncol=nrow(D))
-      }
+      inv<-Iinv%*%InfC
+      dk<- thetanew-thetaold
       
-      if (any(is.infinite(Iinv)) | any(is.nan(Iinv))){
-        Iinv<-matrix(NA,nrow=nrow(D),ncol=nrow(D))
-      }
+      thetastar<- thetanew + inv%*%dk
       
-      if (all(class(Iinv)!="try-error") && !any(is.na(Iinv))){
-        
-        if (verbose==TRUE) {print("accelerating")}
-        
-        loglikold2<- loglikcubp0(m,ordinal,Y,betjj,gama0jj)
-        
-        inv<-Iinv%*%InfC
-        dk<- thetanew-thetaold
-        thetastar<- thetanew + inv%*%dk
-        betjj2<-thetastar[1:(p+1)]; gama0jj2<-thetastar[(p+2)]
-        loglikjj2<- loglikcubp0(m,ordinal,Y,betjj2,gama0jj2)
-        
-        if ( is.nan(loglikjj2)) {
-          Iinv<-matrix(NA,nrow=nrow(D),ncol=nrow(D))
-          if (verbose==TRUE) {cat("not accelerating at iter",nniter,"\n")}
-         
-          nniter <- nniter + 1
-          next
-        } else if (loglikjj2 < loglikold2){
-          Iinv<-matrix(NA,nrow=nrow(D),ncol=nrow(D))
-          if (verbose==TRUE) {cat("not accelerating at iter",nniter,"\n")}
-        
-          nniter <- nniter + 1
-          next
-        } else {
-          loglikold<-loglikold2
-          loglikjj<-loglikjj2
-          betjj<-betjj2; gama0jj<-gama0jj2; csijj<-1/(1+exp(-gama0jj))
-        }
-        
-        
-
-      }  else {
-        if (verbose==TRUE) {cat("not accelerating at iter",nniter,"\n")}
-       
-        Iinv<-matrix(NA,nrow=nrow(D),ncol=nrow(D))
-        iterc2<-iterc2 + 10
-        nniter <- nniter + 1
-        next
-      }
+      betjj<-thetastar[1:(p+1)]; csijj<-thetastar[p+2]
       
     } 
-  
+    loglikjj<-loglikcubp0(m,ordinal,Y,betjj,csijj)
+    
+    #print(c(nniter,betjj,csijj,loglikjj)); #OPTIONAL PRINTING OF ITERATIONS
     testll<-abs(loglikjj-loglikold)
     if(testll<=toler) break else {loglikold<-loglikjj}
     nniter<-nniter+1
@@ -171,7 +129,7 @@ fastcubp0<-function(m,ordinal,Y,starting=NULL,maxiter,toler,iterc=3,invgen=TRUE,
   
   if (nniter < iterc ){
     param<-thetanew
-    aai<- -1+ 1/(logis(Y,betjj)) 
+    aai<- -1+ 1/(logis(Y,betjj)) #exp(-(YY%*%betjj));
     ttau<-1/(1+aai/(m*vettn)) 
     
     dc<-decomp(ttau,ordinal,m,param,ai,Y=Y,W=NULL)
@@ -195,53 +153,42 @@ fastcubp0<-function(m,ordinal,Y,starting=NULL,maxiter,toler,iterc=3,invgen=TRUE,
     if (invgen==TRUE){
       Iinv<- invmatgen(D,H,listE)
     } else {
-      Iinv<- try(solve(D+H),silent=TRUE)
-    }
-    if (any(class(Iinv)=="try-error")){
-      Iinv<-matrix(NA,nrow=nrow(D),ncol=nrow(D))
-    }
+      Iinv<- solve(D+H)
+    }  
     
     
   }
   
-  stime<-c(betjj,csijj)
-  bet<-betjj;  csi<-csijj; gama0<-gama0jj; loglik<-loglikjj;
   if(any(is.na(Iinv))==TRUE){
     warning("ATTENTION: NAs produced")
     varmat<-vmatLouis<-matrix(NA,nrow=nrow(Iinv),ncol=nrow(Iinv))
-    se<-rep(NA,nrow(Iinv))
   } else {
     if(det(Iinv)<=0){  
       warning("ATTENTION: Variance-covariance matrix NOT positive definite")
       varmat<-vmatLouis<-matrix(NA,nrow=nrow(Iinv),ncol=nrow(Iinv))
-      se<-rep(NA,nrow(Iinv))
     } else {
       varmat<-vmatLouis<-Iinv
-      varianze<-diag(varmat)
-      p<-NCOL(Y)
-      csihat<-stime[-c(1:(p+1))]
-      gama0hat<-log(csihat/(1-csihat))
-      secsi<-sqrt(varianze[(p+2)])*exp(-gama0hat)/((1+exp(-gama0hat))^2)
-      se<-c(sqrt(varianze[-c(p+2)]),secsi)
     }
   }
   
   durata<-proc.time()-tt0;durata<-durata[1];
   
+  #vmatLouis<-Iinv 
   
-  
-  
+  bet<-betjj;  csi<-csijj;  loglik<-loglikjj;
   ####################################################################
   AICCUBp0<- -2*loglik+2*(p+2)
   BICCUBp0<- -2*loglik+log(n)*(p+2)
-  ###################################################################
+  ####################################################################
+  # Compute asymptotic standard errors of ML estimates
+  ####################################################################
+  
+  stime<-c(bet,csi)
   
   
-  
-  
-  results<-list('estimates'=stime, 'se'=se,  'time'=durata,
+  results<-list('estimates'=stime,'time'=durata,
                 'loglik'=loglik,'niter'=nniter,'varmat'=varmat,
                 'BIC'=BICCUBp0,'vmatLouis'=vmatLouis)
-  
+  #class(results)<-"cub"
   return(results)
 }

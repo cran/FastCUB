@@ -4,7 +4,7 @@
 \alias{fastcubpq}
 \title{Main function for CUB models with covariates for both the uncertainty and the feeling components}
 \usage{
-fastcubpq(m,ordinal,Y,W,starting=NULL,maxiter,toler,iterc=3,invgen=TRUE,verbose=FALSE)
+fastcubpq(m,ordinal,Y,W,starting=NULL,maxiter,toler,iterc=3,invgen=TRUE)
 }
 \arguments{
 \item{m}{Number of ordinal categories}
@@ -24,15 +24,13 @@ fastcubpq(m,ordinal,Y,W,starting=NULL,maxiter,toler,iterc=3,invgen=TRUE,verbose=
 \item{iterc}{Iteration from which the acceleration strategy starts}
 
 \item{invgen}{Logical: should the recursive formula for the inverse of the information matrix be considered? (Default is TRUE)}
-
-\item{verbose}{Logical: should messages about  acceleration steps be printed out? (Default is FALSE)}
 }
 \value{
 An object of the class "fastCUB"
 }
 \description{
 Estimate and validate a CUB model for given ordinal responses, with covariates for explaining both the
- feeling and the uncertainty components by means of logistic transform.
+feeling and the uncertainty components by means of logistic transform.
 }
 \seealso{
 \code{\link{loglikcubpq}}, \code{\link{inibestgama}}

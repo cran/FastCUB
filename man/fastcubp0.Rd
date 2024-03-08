@@ -4,7 +4,7 @@
 \alias{fastcubp0}
 \title{Main function for CUB models with covariates for the uncertainty component}
 \usage{
-fastcubp0(m,ordinal,Y,starting=NULL,maxiter,toler,iterc=3,invgen=TRUE,verbose=FALSE)
+fastcubp0(m,ordinal,Y,starting=NULL,maxiter,toler,iterc=3,invgen=TRUE)
 }
 \arguments{
 \item{m}{Number of ordinal categories}
@@ -22,14 +22,12 @@ fastcubp0(m,ordinal,Y,starting=NULL,maxiter,toler,iterc=3,invgen=TRUE,verbose=FA
 \item{iterc}{Iteration from which the acceleration strategy starts}
 
 \item{invgen}{Logical: should the recursive formula for the inverse of the information matrix be considered? (Default is TRUE)}
-
-\item{verbose}{Logical: should messages about  acceleration steps be printed out? (Default is FALSE)}
 }
 \value{
 An object of the class "fastCUB"
 }
 \description{
-Estimate and validate a CUB model for given ordinal responses, with covariates for explaining 
+Estimate and validate a CUB model for given ordinal responses, with covariates for explaining
 the feeling component via a logistic transform.
 }
 \keyword{internal}

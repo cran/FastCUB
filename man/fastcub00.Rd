@@ -4,7 +4,7 @@
 \alias{fastcub00}
 \title{Main function for CUB models without covariates}
 \usage{
-fastcub00(m,ordinal,starting=NULL,maxiter,toler,iterc=3,invgen=TRUE,verbose=FALSE)
+fastcub00(m,ordinal,starting=NULL,maxiter,toler,iterc=3,invgen=TRUE)
 }
 \arguments{
 \item{m}{Number of ordinal categories}
@@ -20,8 +20,6 @@ fastcub00(m,ordinal,starting=NULL,maxiter,toler,iterc=3,invgen=TRUE,verbose=FALS
 \item{iterc}{Iteration from which the acceleration strategy starts}
 
 \item{invgen}{Logical: should the recursive formula for the inverse of the information matrix be considered? (Default is TRUE)}
-
-\item{verbose}{Logical: should messages about acceleration steps be printed out? (Default is FALSE)}
 }
 \value{
 An object of the class "fastCUB"

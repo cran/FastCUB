@@ -51,12 +51,12 @@ makeplotCUB<-function(object){
 
     if ( is.null(W) & is.null(Y) ){
       theorpr<-fitted(object)
-      
+      #freq<-matrix(NA,nrow=m,ncol=nprof)
       freq<-tabulate(ordinal,nbins=m)
       stringtitle<-"CUB model";
       thpr<-theorpr[,1]
       dissimi<-dissim(thpr,freq/n)
-     
+      #par(mfrow=c(2,1))
       plot(cbind(1:m,1:m),cbind(thpr,(freq/n)),las=1,
            main=paste(stringtitle,  "     (Diss =",round(dissimi,digits=4),")"),
            xlim=c(1,m),ylim=c(0.0,1.1*max(thpr,(freq/n))),
@@ -87,15 +87,15 @@ makeplotCUB<-function(object){
         abline(h=0);
         
       } else {
-        warning("No built-in plot method for this variables specifications: see multicub() and cubvisual()")
-        
+        cat("No built-in plot method for this variables specifications: see multicub() and cubvisual()","\n")
+        # multicub(listaord,as.list(rep(m,nprof)),labelpoints = profili)
         
       }
       
     } 
     if (!is.null(W) & is.null(Y) ){
       
-      
+      #W<-as.matrix(ellipsis$W)
       
       if (NCOL(W)==1 && length(unique(W))==2){
         theorpr<-fitted(object)
@@ -111,10 +111,10 @@ makeplotCUB<-function(object){
         lines(1:m,prob1,cex=1.2,pch=19,lty=2,type="b");
         abline(h=0);
         
-        
+        #  multicub(listaord,as.list(rep(m,nprof)),labelpoints = profili)
         
       } else {
-        warning("No built-in plot method for this variables specifications: see multicub() and cubvisual()")
+        cat("No built-in plot method for this variables specifications: see multicub() and cubvisual()","\n")
         
 
       }
@@ -145,7 +145,7 @@ makeplotCUB<-function(object){
     
         }
       } else {
-        warning("No built-in plot method for this variables specifications: see multicub() and cubvisual()","\n")
+        cat("No built-in plot method for this variables specifications: see multicub() and cubvisual()","\n")
       } 
       
     } 

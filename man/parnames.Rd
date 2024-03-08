@@ -2,6 +2,7 @@
 % Please edit documentation in R/parnames.R
 \name{parnames}
 \alias{parnames}
+\alias{parnames.fastCUB}
 \title{Generic function for coefficient names}
 \usage{
 parnames(object)

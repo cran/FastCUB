@@ -5,7 +5,7 @@
 \title{Best-subset variable selection for CUB models via fast EM algorithm}
 \usage{
 bestcub(ordinal,m,Y,W,toler=1e-4,maxiter=200,iterc=5,alpha=0.05,mix=FALSE,
-tolmix=1e+2,fmix=NULL,invgen=TRUE,verbose=FALSE)
+tolmix=1e+2,fmix=NULL,invgen=TRUE)
 }
 \arguments{
 \item{ordinal}{Vector of ordinal responses}
@@ -16,7 +16,7 @@ tolmix=1e+2,fmix=NULL,invgen=TRUE,verbose=FALSE)
 
 \item{W}{Matrix of selected covariates for the feeling parameter}
 
-\item{toler}{Fixed convergence tolerance for final estimates}
+\item{toler}{Fixed error tolerance for final estimates}
 
 \item{maxiter}{Maximum number of iterations allowed for running the optimization algorithm}
 
@@ -26,18 +26,15 @@ tolmix=1e+2,fmix=NULL,invgen=TRUE,verbose=FALSE)
 
 \item{mix}{Logical: should a first preliminary standard EM be run at toler equal to tolmix? (default is FALSE)}
 
-\item{tolmix}{Convergence tolerance for first preliminary EM (if mix=TRUE).}
+\item{tolmix}{Error tolerance for first preliminary EM (if mix=TRUE).}
 
 \item{fmix}{Fraction of iteration needed for first preliminary EM (if mix=TRUE). Default is null.}
 
 \item{invgen}{Logical: should the recursive formula for the inverse of the information matrix be considered? (Default is TRUE)}
-
-\item{verbose}{Logical: should messages about  acceleration steps be printed out? (Default is FALSE)}
 }
 \value{
 A list containing the following results:
-\item{vsel}{List of all estimated models (with the accelerated EM) as FastCUB objects}
-\item{bestmodel}{FastCUB object corresponding to the best CUB model (according to BIC), if not null}
+\item{vsel}{List of all estimated models (with the accelerated EM)}
 \item{bestW}{Names of covariates for feeling in the best model with all significant effect}
 \item{bestY}{Names of covariates for feeling in the best model with all significant effect}
 \item{param}{ML estimates of the best model}
@@ -48,26 +45,7 @@ A list containing the following results:
 }
 \description{
 Perform a best-subset search for CUB models on the basis of the BIC index, by combining all possible covariates'
- specification for feeling and for uncertainty parameters
-}
-\examples{
-\donttest{
-library(FastCUB)
-data(univer)
-ordinal<-univer$global
-m<-7
-Y<-univer[,c(2,3,4)]
-W<-univer[,8:11]
-## Search for the best CUB model with covariates only for feeling
-best0q<-bestcub(ordinal,m,Y=NULL,W,toler=1e-4,maxiter=100,iterc=5,alpha=0.05,invgen=TRUE)
-## Search for the best CUB model with covariates only for uncertainty
-bestp0<-bestcub(ordinal,m,Y,W=NULL,toler=1e-4,maxiter=100,iterc=5,alpha=0.05,invgen=TRUE)
-## Search for the best CUB model with covariates for both parameters
-bestpq<-bestcub(ordinal,m,Y,W,toler=1e-4,maxiter=100,iterc=5,alpha=0.05,invgen=TRUE,
-    mix=TRUE,tolmix=1e+3,fmix=1)
-final<-bestpq$bestmodel; summary(final)
-}
-
+specification for feeling and for uncertainty parameters
 }
 \seealso{
 \code{\link{fastCUB}}
