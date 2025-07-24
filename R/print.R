@@ -32,32 +32,20 @@ print.fastCUB<-function(x,...){
   sterr<-as.numeric(round(sqrt(diag(vcov(x))),digits=digits))
   
   mat<-cbind(round(x$estimates,digits=digits),sterr)
-  rownames(mat)<-parnames(x)
+  rownames(mat)<-parnames.fastCUB(x)
   colnames(mat)<-c("Estimates","Standard Errors")
   
   object<-x$object
   family<-object$family
   stime<-object$estimates
-    cat("","\n")
- print(mat)
-#   cat("Coefficients:","\n")
-#   print(coef(x,digits=digits))
+  cat("","\n")
+  print(mat)
+  #   cat("Coefficients:","\n")
+  #   print(coef(x,digits=digits))
   cat("","\n")
   cat("Maximized Log-Likelihood:",logLik(x,digits=digits),"\n")
   
   invisible(x)
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 

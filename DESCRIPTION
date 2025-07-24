@@ -1,6 +1,6 @@
 Package: FastCUB
 Title: Fast Estimation of CUB Models via Louis' Identity
-Version: 0.0.3
+Version: 0.0.4
 Authors@R: 
     c(person("Rosaria", "Simone", role = c("aut","cre"), email = "rosaria.simone@unina.it"))
 Description: For ordinal rating data, consider the accelerated EM algorithm to estimate and test models within the family of
@@ -14,7 +14,7 @@ LazyData: true
 RoxygenNote: 6.1.1
 NeedsCompilation: no
 Repository: CRAN
-Packaged: 2024-03-08 10:57:59 UTC; Rosaria
+Packaged: 2025-07-24 09:43:03 UTC; Rosaria
 Author: Rosaria Simone [aut, cre]
 Maintainer: Rosaria Simone <rosaria.simone@unina.it>
-Date/Publication: 2024-03-08 11:20:02 UTC
+Date/Publication: 2025-07-24 10:00:22 UTC

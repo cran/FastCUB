@@ -13,15 +13,23 @@ parnames <- function(object) UseMethod("parnames", object)
 
 
 parnames.fastCUB<-function(object){
+  #call <- match.call()
   
   effe<-object$formula
   #   EFFE<-modello$Formula
   data<-object$ellipsis$data
+  # if (missing(data)) {
+  #   data <- environment(effe)
+  #   
+  # }
+  #data<-environment(effe)#object$ellipsis$data
+  
   mf<-model.frame(effe,data=data,na.action=na.omit)
+  #mf <- model.frame(effe, data=environment(effe), na.action = na.omit)
   
   covpai<-model.matrix(effe,data=mf,rhs=1)
-  covcsi<-model.matrix(effe,data=mf,rhs=2)
-
+  covcsi<-model.matrix(effe,data=mf,rhs=2) 
+  
   if (ncol(covpai)==0){
     Y<-NULL
   } else {
@@ -43,73 +51,73 @@ parnames.fastCUB<-function(object){
       W<-covcsi[,-1]
     }
   }
-
   
- 
+  
+  
   ellipsis<-object$ellipsis
   listanomi<-c()
-
-    if (is.null(Y) & is.null(W)){
-      listanomi<-c("pai","csi")
-    } 
-     if (!is.null(Y) & is.null(W)){
-      betacoef<-c()
-      npar<-length(object$estimates)
-      if (!is.null(colnames(Y))){
-        betacoef<-c("constant",colnames(Y))
-      } else {
+  
+  if (is.null(Y) & is.null(W)){
+    listanomi<-c("pai","csi")
+  } 
+  if (!is.null(Y) & is.null(W)){
+    betacoef<-c()
+    npar<-length(object$estimates)
+    if (!is.null(colnames(Y))){
+      betacoef<-c("constant",colnames(Y))
+    } else {
       
-       for (j in 1:(npar-1)){
+      for (j in 1:(npar-1)){
         betacoef[j]<-paste("beta",j-1,sep="_")
-       }
       }
-       listanomi<-c(betacoef,"csi")
-     } 
+    }
+    listanomi<-c(betacoef,"csi")
+  } 
+  
+  if (is.null(Y) & !is.null(W)){
+    gamacoef<-c()
+    npar<-length(object$estimates)
     
-    if (is.null(Y) & !is.null(W)){
-      gamacoef<-c()
-      npar<-length(object$estimates)
-     
-      if (!is.null(colnames(W))){
-        gamacoef<-c("constant",colnames(W))
-      } else {
-        for (j in 1:(npar-1)){
-          gamacoef[j]<-paste("gamma",j-1,sep="_")
-        }
+    if (!is.null(colnames(W))){
+      gamacoef<-c("constant",colnames(W))
+    } else {
+      for (j in 1:(npar-1)){
+        gamacoef[j]<-paste("gamma",j-1,sep="_")
       }
-      
-      listanomi<-c("pai",gamacoef)
     }
     
-    if (!is.null(Y) & !is.null(W)) {
-      betacoef<-gamacoef<-c()
-      Y<-as.matrix(Y); W<-as.matrix(W)
-      ny<-NCOL(Y); nw<-NCOL(W);
-      
-      if (is.null(colnames(Y))){
-        for (j in 1:(ny+1)){
-          betacoef[j]<-paste("beta",j-1,sep="_")
-        }
-        
-        } else {
-          betacoef<-c("constant",colnames(Y))
-        }
-        
-      
-      
-      if (is.null(colnames(W))){
-        for (j in 1:(nw+1)){
-          gamacoef[j]<-paste("gamma",j-1,sep="_")
-        }
-        
-      } else {
-        gamacoef<-c("constant",colnames(W))
-        
+    listanomi<-c("pai",gamacoef)
+  }
+  
+  if (!is.null(Y) & !is.null(W)) {
+    betacoef<-gamacoef<-c()
+    Y<-as.matrix(Y); W<-as.matrix(W)
+    ny<-NCOL(Y); nw<-NCOL(W);
+    
+    if (is.null(colnames(Y))){
+      for (j in 1:(ny+1)){
+        betacoef[j]<-paste("beta",j-1,sep="_")
       }
-     
-      listanomi<-c(betacoef,gamacoef)
+      
+    } else {
+      betacoef<-c("constant",colnames(Y))
     }
     
+    
+    
+    if (is.null(colnames(W))){
+      for (j in 1:(nw+1)){
+        gamacoef[j]<-paste("gamma",j-1,sep="_")
+      }
+      
+    } else {
+      gamacoef<-c("constant",colnames(W))
+      
+    }
+    
+    listanomi<-c(betacoef,gamacoef)
+  }
+  
   
   return(listanomi)
 }

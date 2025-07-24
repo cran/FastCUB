@@ -32,15 +32,15 @@
 #' @keywords stats 
 
 ########################################
-
-bestcub<-
-  function (ordinal, m, Y, W, toler = 1e-04, maxiter = 200, iterc = 5, 
-            alpha = 0.05, mix = FALSE, tolmix = 100, fmix = NULL, invgen = TRUE) 
-  {
+bestcub<- function (ordinal, m, Y, W, toler = 1e-04, maxiter = 200, iterc = 5, 
+                        alpha = 0.05, mix = FALSE, tolmix = 100, fmix = NULL, invgen = TRUE) {
+  
+  requireNamespace("utils", "combn")
+  #subsetting Y
+  if (!is.null(Y)){
     sy <- NCOL(Y)
     ss <- 0
     itercvett <- c()
-    requireNamespace("utils", "combn")
     setY <- list()
     for (k in 1:sy) {
       indy <- combn(sy, k)
@@ -51,6 +51,13 @@ bestcub<-
         setY[[ss]] <- indyy
       }
     }
+  } else {
+    setY<-list(); length(setY)<-1
+    setY[[1]]<-NA
+  }
+  
+  #subsetting W
+  if (!is.null(W)){
     sw <- NCOL(W)
     ss <- 0
     setW <- list()
@@ -63,28 +70,91 @@ bestcub<-
         setW[[ss]] <- indww
       }
     }
-    vsel <- list()
-    matiterfast <- matduratafast <- matrix(nrow = length(setW), 
-                                           ncol = length(setY))
-    for (i in 1:length(setW)) {
-      WW <- as.matrix(W[, setW[[i]]])
-      for (j in 1:length(setY)) {
-        YY <- as.matrix(Y[, setY[[j]]])
-        tt <- (i - 1) * length(setY) + j
-        cat("##############################", "\\n")
-        cat("Modello", tt, "\\n")
-        if (mix == TRUE) {
-          cub <- GEM(Formula(ordinal ~ YY | WW | 0), family = "cub", 
-                     toler = tolmix)
-          iterc <- ifelse(!is.null(fmix), round(fmix * 
-                                                  cub$niter), 1)
-          starting <- cub$estimates
+  }   else {
+    setW<-list(); length(setW)<-1
+    setW[[1]]<-NA
+  } 
+  
+  
+  vsel <- list()
+  matiterfast <- matduratafast <- matrix(nrow = length(setW),ncol = length(setY))
+  
+  
+  nmod<-length(setW)*length(setY)
+  
+  error_vett<-c()
+  
+  for (i in 1:length(setW)){
+    if (!any(is.na(setW[[i]]))){
+      WW <- as.matrix(as.matrix(W)[, setW[[i]]])
+      colnames(WW)<-colnames(as.matrix(W))[setW[[i]]]
+      formulaW<-paste(colnames(WW),collapse="+")
+      YW<-WW
+      nomiW<-colnames(as.matrix(WW))
+      colnames(YW)<-colnames(WW)
+    } else {
+      YW<-NULL
+      nomiW<-NULL
+    }
+    for (j in 1:length(setY)){
+      
+      if (!any(is.na(setY[[j]]))){
+        YY <- as.matrix(as.matrix(Y)[, setY[[j]]])
+        colnames(YY)<-colnames(as.matrix(Y))[setY[[j]]]
+        formulaY<-paste(colnames(YY),collapse="+")
+        nomiY<-colnames(as.matrix(YY))
+        
+        if (!is.null(YW)){
+          YW<-cbind(YY,YW)
+        } else {
+          YW<-as.matrix(YY)
         }
-        else {
-          starting = NULL
+      } else {
+        nomiY<-NULL
+      }
+      
+      YW_ok<-as.matrix(YW[,match(unique(colnames(YW)),colnames(YW))])
+      colnames(YW_ok)<-colnames(YW)[match(unique(colnames(YW)),colnames(YW))]
+      dd<-data.frame(ordinal,YW_ok)
+      tt<- length(setY)*(i-1) + j      
+      
+      vsel[[tt]]<-list()
+      cat("##############################", "\n")
+      cat("Estimating Model n.", tt, "\n")
+      
+      if (!is.null(nomiW)){
+        formulaW<-paste(nomiW,collapse="+")
+        if (!is.null(nomiY)){
+          formulaY<-paste(nomiY,collapse="+")
+        } else {
+          formulaY<-0
         }
-        fitcov <- fastCUB(Formula(ordinal~YY|WW), m, starting, maxiter, 
-                          toler, iterc = iterc, invgen)
+      } else {
+        formulaW<-0
+      }
+      
+      if (mix == TRUE) {
+        effe_ini<-paste(formulaY,formulaW,sep="|")
+        effe_ini<-paste(effe_ini,0,sep="|")
+        cub <- GEM(as.Formula(paste("ordinal",effe_ini,sep="~")), family = "cub",toler = tolmix,data=dd,m=m)
+        iterc <- ifelse(!is.null(fmix), round(fmix*cub$niter), 1)
+        starting <- cub$estimates
+      }
+      else {
+        starting = NULL
+      }
+      
+      fitcov <- try(fastCUB(as.Formula(paste("ordinal",paste(formulaY,formulaW,sep="|"),sep="~")), data=dd,m, starting, maxiter, 
+                            toler, iterc = iterc, invgen=invgen),silent=TRUE)
+      
+      if (any(class(fitcov)=="try-error")){
+        matiterfast[i, j] <- NA
+        matduratafast[i, j] <- NA
+        print("error")
+        error_vett<-c(error_vett,tt)
+        #print(error_vett)
+        
+      } else {
         if (mix == TRUE) {
           matiterfast[i, j] <- fitcov$niter + cub$niter
           matduratafast[i, j] <- fitcov$time + cub$time
@@ -93,42 +163,81 @@ bestcub<-
           matiterfast[i, j] <- fitcov$niter
           matduratafast[i, j] <- fitcov$time
         }
-        vsel[[tt]] <- fitcov
-        vsel[[tt]]$nomiW <- colnames(W)[setW[[i]]]
-        vsel[[tt]]$nomiY <- colnames(Y)[setY[[j]]]
       }
-    }
-    bicfast <- as.numeric(lapply(vsel, function(x) x$BIC))
-    bic_ord <- sort(bicfast, index = TRUE)
-    indici <- bic_ord$ix
-    allsig <- 0
-    l <- 1
-    sigmodel <- c()
-    while (allsig == 0) {
-      jj <- indici[l]
-      lq <- length(vsel[[jj]]$nomiW)
-      lp <- length(vsel[[jj]]$nomiY)
-      param <- vsel[[jj]]$estimates
-      se <- sqrt(diag(vsel[[jj]]$vmatLouis))
-      wald <- param/se
-      wald2 <- wald[-c(1, lp + 2)]
-      if (all(abs(wald2) > qnorm(1 - alpha/2))) {
-        allsig <- 1
-        sigmodel <- c(sigmodel, jj)
-      }
-      l <- l + 1
-    }
-    ll <- l - 1
-    bestW <- vsel[[indici[ll]]]$nomiW
-    bestY <- vsel[[indici[ll]]]$nomiY
-    bestparam <- vsel[[indici[ll]]]$estimates
-    bestse <- sqrt(diag(vsel[[indici[ll]]]$vmatLouis))
-    bestbic <- bicfast[indici[ll]]
-    return(list(vsel = vsel, itercvett = itercvett, bestW = bestW, 
-                bestY = bestY, param = bestparam, se = bestse, bic = bestbic, 
-                mattime = matduratafast, matiter = matiterfast))
+      #names(vsel[[tt]])<-tt
+      vsel[[tt]][[1]] <- fitcov
+
+      vsel[[tt]][[2]] <- nomiW 
+      vsel[[tt]][[3]] <- nomiY
+      names(vsel[[tt]])<-c('model','nomiW','nomiY')
+      # if (class(vsel[[tt]]$model)=="try-error"){
+      #   
+      #   # vsel[[tt]]$model<-list()
+      #   # vsel[[tt]]$model$BIC<-Inf
+      #   # vsel[[tt]]$model$estimates<-NA
+      #   # vsel[[tt]]$model$varmat<-NA
+      # }
+      
+    } #fine ciclo j
+  }# fine ciclo i
+  
+  
+  if (!is.null(error_vett)){
+    vsel2<-list()
+    vsel2<-vsel[-error_vett]
+    names(vsel2)<-names(vsel)[-error_vett]
+    vsel<-vsel2
+    
   }
-
-
-
+  bicvett<-lapply(vsel, function(x) x[[1]]$BIC)
+  bicfast <- as.numeric(bicvett)
+  
+  bic_ord <- sort(bicfast, index = TRUE)
+  indici <- bic_ord$ix
+  allsig <- 0; nosig<-0
+  l <- 1
+  sigmodel <- c()
+  while ((allsig == 0) & (l <= length(indici))) {
+    jj <- indici[l]
+    if (!is.null(vsel[[jj]]$nomiW)){
+      lq <- length(vsel[[jj]]$nomiW)
+    } else {
+      lq<-0
+    }
+    if (!is.null(vsel[[jj]]$nomiY)){
+      lp <- length(vsel[[jj]]$nomiY)
+    } else {
+      lp<-0
+    }
+    
+    param <- vsel[[jj]]$model$estimates
+    se <- sqrt(diag(vsel[[jj]]$model$varmat))
+    wald <- param/se
+    wald2 <- wald[-c(1, lp + 2)]
+    if (all(abs(wald2) > qnorm(1 - alpha/2))) {
+      allsig <- 1
+      sigmodel <- c(sigmodel, jj)
+    }
+    l<-l+1
+  }
+  if (allsig!=0){
+    ll <- l - 1
+  } else {
+    ll<- 1
+    print("Warning: No significant model at selected alpha level")
+    
+  }
+  bestW <- vsel[[indici[ll]]]$nomiW
+  bestY <- vsel[[indici[ll]]]$nomiY
+  bestparam <- vsel[[indici[ll]]]$model$estimates
+  bestse <- sqrt(diag(vsel[[indici[ll]]]$model$varmat))
+  bestbic <- bicfast[indici[ll]]
+  
+  best_model<-vsel[[indici[ll]]]
+  
+  return(list(vsel = vsel, bestW = bestW, 
+              bestY = bestY, param = bestparam, se = bestse, bic = bestbic, 
+              mattime = matduratafast, matiter = matiterfast,'bicfast'=bicfast,'best_model'=best_model))
+  
+}
 

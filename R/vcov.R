@@ -29,13 +29,16 @@ vcov.fastCUB<-function(object, ...){
   
   ellipsis<-object$ellipsis
   family<-object$family
-  varcov<-as.matrix(object$vmatLouis)
-  listanomi<-parnames(object)
+  varcov<-as.matrix(object$varmat)
+  listanomi<-parnames.fastCUB(object)
   
   if (NROW(varcov)>1){
-    dimnames(varcov)<-list(listanomi,listanomi)
+    rownames(varcov)<-colnames(varcov)<-listanomi
+    #dimnames(varcov)<-list(listanomi,listanomi)
   } else {
-    dimnames(varcov)<-list(listanomi,"Squared Standard Error")
+    rownames(varcov)<-listanomi
+    colnames(varcov)<-"Squared Standard Error"
+    #dimnames(varcov)<-list(listanomi,"Squared Standard Error")
   }
   return(round(varcov,digits=digits))
 }

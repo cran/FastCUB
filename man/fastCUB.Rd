@@ -7,7 +7,7 @@
 fastCUB(Formula, data, ...)
 }
 \arguments{
-\item{Formula}{Object of class Formula.}
+\item{Formula}{Object of class Formula, with two matrix for the right-hand side for uncertainty and feeling covariates.}
 
 \item{data}{Data frame from which model matrices and response variables are taken.}
 
@@ -16,7 +16,7 @@ fastCUB(Formula, data, ...)
 }
 \value{
 An object of the class "fastCUB": returns a list containing the following results:
-\item{estimates}{Maximum likelihood estimates: \eqn{(\pi, \xi)}}
+\item{estimates}{Maximum likelihood estimates of parameters}
 \item{loglik}{Log-likelihood function at the final estimates}
 \item{varmat}{Variance-covariance matrix of final estimates}
 \item{niter}{Number of executed iterations}
